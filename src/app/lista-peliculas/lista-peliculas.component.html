@@ -1,0 +1,19 @@
+<!-- lista-peliculas.component.html -->
+
+<div>
+    <h2>Lista de Películas</h2>
+  
+    <input type="text" placeholder="Buscar películas" (input)="buscarPeliculas($event)" />
+  
+    <div *ngIf="peliculas && peliculas.length">
+      <div *ngFor="let pelicula of peliculas">
+        <app-lista-peliculas [pelicula]="pelicula"></app-lista-peliculas>
+      </div>
+    </div>
+  
+    <div *ngIf="!(peliculas && peliculas.length)">
+      <p>No se encontraron películas.</p>
+    </div>
+  </div>
+  
+  

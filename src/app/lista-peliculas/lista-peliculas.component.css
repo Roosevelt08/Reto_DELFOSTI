@@ -1,0 +1,19 @@
+/* Estilos generales */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+#filter-section, #movies-list {
+  margin: 20px;
+}
+
+/* Estilos adicionales según sea necesario */
