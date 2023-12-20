@@ -1,4 +1,3 @@
-// lista-peliculas.component.ts
 import { Component, OnInit } from '@angular/core';
 import { PeliculasService } from '../peliculas.service';
 import { Pelicula } from '../pelicula.model';
