@@ -1,18 +1,20 @@
-<div>
-  <h2>Filtrar Películas</h2>
-
-  <select [(ngModel)]="generoSeleccionado" (ngModelChange)="aplicarFiltros()">
-    <option value="Todos">Todos los géneros</option>
+<!-- lista-peliculas.component.html -->
+<form (ngSubmit)="filtrarPeliculas()">
+  <label for="genero">Género:</label>
+  <select id="genero" name="genero" [(ngModel)]="filtroGenero">
+    <option value="">Todos</option>
     <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
   </select>
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" name="nombre" [(ngModel)]="filtroNombre">
+  <label for="descripcion">Descripción:</label>
+  <input type="text" id="descripcion" name="descripcion" [(ngModel)]="filtroDescripcion">
+  <button type="submit">Filtrar</button>
+</form>
 
-  <input type="text" placeholder="Nombre" [(ngModel)]="nombreFiltro" (ngModelChange)="aplicarFiltros()">
-  <input type="text" placeholder="Descripción" [(ngModel)]="descripcionFiltro"(ngModelChange)="aplicarFiltros()">
-
-  <!-- <button (click)="aplicarFiltros()">Aplicar Filtros</button> -->
-
-  <h2>Lista de Películas</h2>
-  <div *ngFor="let pelicula of peliculas">
-    <!-- Aquí se mostrarían las películas filtradas -->
-  </div>
+<div *ngFor="let pelicula of peliculasFiltradas">
+  <h3>{{ pelicula.title }}</h3>
+  <p>{{ pelicula.description }}</p>
+  <p>{{ pelicula.genre }}</p>
 </div>
+

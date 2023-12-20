@@ -1,4 +1,7 @@
+// lista-peliculas.component.ts
 import { Component, OnInit } from '@angular/core';
+import { PeliculasService } from '../peliculas.service';
+import { Pelicula } from '../pelicula.model';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -7,38 +10,51 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./lista-peliculas.component.css']
 })
 export class ListaPeliculasComponent implements OnInit {
-
-  peliculas: any[] = [];
+  peliculas: Pelicula[] = [];
+  peliculasFiltradas: Pelicula[] = [];
   generos: string[] = [];
-  generoSeleccionado: string = 'Todos';
-  nombreFiltro: string = '';
-  descripcionFiltro: string = '';
+  filtroGenero: string = '';
+  filtroNombre: string = '';
+  filtroDescripcion: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private peliculasService: PeliculasService,
+    private http: HttpClient) { }
 
-  ngOnInit() {
-    this.http.get('assets/peliculas.json').subscribe((data: any) => {
-      this.peliculas = data.movies;
-      this.generos = data.genre; // Asignar los datos recuperados a this.peliculas
-    });
+  ngOnInit(): void {
+    this.obtenerPeliculas();
   }
 
-   buscarPeliculas(event: Event) {
-     const valor = (event.target as HTMLInputElement)?.value;
-     if (valor !== null && valor !== undefined) {
-       // Lógica para buscar películas con el valor proporcionado
-     }
-   }
+  obtenerPeliculas(): void {
+    this.http.get<any>('./assets/peliculas.json')
+    this.peliculasService.obtenerPeliculas()
+      .subscribe((data: any) => {
+        console.log('Datos obtenidos:',data);
+        this.peliculas = data.movies;
+        this.generos = data.genres;
+      }, error => {
+        console.error('Error al obtener las películas', error);
+      });
+  }
 
-   aplicarFiltros() {
-    this.peliculas = this.peliculas.filter(pelicula => {
-      const cumpleGenero = this.generoSeleccionado === 'Todos' || pelicula.genre === this.generoSeleccionado;
-      const cumpleNombre = pelicula.title.toLowerCase().includes(this.nombreFiltro.toLowerCase());
-      const cumpleDescripcion = pelicula.description.toLowerCase().includes(this.descripcionFiltro.toLowerCase());
+  filtrarPeliculas(): void {
+    this.peliculasFiltradas = this.peliculas.filter(pelicula => {
+      let cumpleGenero = true;
+      let cumpleNombre = true;
+      let cumpleDescripcion = true;
+
+      if (this.filtroGenero && this.filtroGenero.length > 0) {
+        cumpleGenero = this.filtroGenero.includes(pelicula.genre);
+      }
+
+      if (this.filtroNombre) {
+        cumpleNombre = pelicula.title.toLowerCase().includes(this.filtroNombre.toLowerCase());
+      }
+
+      if (this.filtroDescripcion) {
+        cumpleDescripcion = pelicula.description.toLowerCase().includes(this.filtroDescripcion.toLowerCase());
+      }
+
       return cumpleGenero && cumpleNombre && cumpleDescripcion;
     });
   }
-  
-  
 }
-
